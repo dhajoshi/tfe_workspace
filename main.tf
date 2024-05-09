@@ -30,7 +30,7 @@ data tfe_variable_set "test" {
 }
 
 module "advanced_workspace" {
-  source = "../../"
+  source = "./modules/tfe_workspace"
 
   name              = "advanced-workspace"
   organization      = data.tfe_organization.myorg.name
