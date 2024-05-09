@@ -4,7 +4,7 @@ terraform {
   required_providers {
     tfe = {
       source  = "hashicorp/tfe"
-      version = "~> 0.40.0"
+      version = "~> 0.54.0"
     }
   }
 }
@@ -19,14 +19,14 @@ data "tfe_organization" "myorg" {
 }
 
 # Check for project exist
-data "tfe_project" "tfeproject" {
-  name = var.project_name
-  organization = var.organization
-}
+# data "tfe_project" "tfeproject" {
+#   name = var.project_name
+#   organization = var.organization
+# }
 
 # Use a dedicated project for this workspace
 resource "tfe_project" "myproject" {
-  count        = data.tfe_project.tfeproject.id ? 1 : 0
+ # count        = data.tfe_project.tfeproject.id ? 1 : 0
   organization = data.tfe_organization.myorg.name
   name         = var.project_name
 }
