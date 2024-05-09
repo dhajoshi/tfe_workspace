@@ -21,7 +21,7 @@ data "tfe_organization" "myorg" {
 # Use a dedicated project for this workspace
 resource "tfe_project" "myproject" {
   organization = data.tfe_organization.myorg.name
-  name         = "var.project_name"
+  name         = var.project_name
 }
 
 data tfe_variable_set "test" {
@@ -32,7 +32,7 @@ data tfe_variable_set "test" {
 module "advanced_workspace" {
   source = "./modules/tfe_workspace"
 
-  name              = "var.name"
+  name              = var.name
   organization      = data.tfe_organization.myorg.name
   description       = "An advanced Terraform Cloud/Enterprise workspace"
   terraform_version = "1.3.7"
@@ -47,16 +47,16 @@ module "advanced_workspace" {
 */
   queue_all_runs             = false
  # working_directory         = "/my/sub/path"
-  vcs_repository_identifier  = "var.vcs_repository_identifier"
+  vcs_repository_identifier  = var.vcs_repository_identifier
   vcs_repository_branch      = "main"
-  oauth_token_id             =  "var.oauth_token_id"
+  oauth_token_id             =  var.oauth_token_id
   variable_set_ids           = [data.tfe_variable_set.test.id]
 
   terraform_sensitive_variables = {
     secret_token = var.secret_token
   }
 
-  terraform_hcl_variables = {
+ /*terraform_hcl_variables = {
     list_of_values = ["a", "b", "c"]
     map_of_values = {
       key1 = "value1"
@@ -64,7 +64,7 @@ module "advanced_workspace" {
       key3 = 12345
     }
   }
-
+*/
   environment_sensitive_variables = {
     AWS_ACCESS_KEY_ID     = var.access_key_id     #NOTE: sensitive value
     AWS_SECRET_ACCESS_KEY = var.secret_access_key #NOTE: sensitive value
