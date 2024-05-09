@@ -18,8 +18,15 @@ data "tfe_organization" "myorg" {
   name = var.organization
 }
 
+# Check for project exist
+data "tfe_project" "tfeproject" {
+  name = var.project_name
+  organization = var.organization
+}
+
 # Use a dedicated project for this workspace
 resource "tfe_project" "myproject" {
+  count        = data.tfe_project.tfeproject.id ? 1 : 0
   organization = data.tfe_organization.myorg.name
   name         = var.project_name
 }
