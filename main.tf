@@ -15,13 +15,13 @@ provider "tfe" {
 
 # Use existing organization
 data "tfe_organization" "myorg" {
-  name = "dhajoshi-infra"
+  name = var.organization
 }
 
 # Use a dedicated project for this workspace
 resource "tfe_project" "myproject" {
   organization = data.tfe_organization.myorg.name
-  name         = "myproject"
+  name         = "var.project_name"
 }
 
 data tfe_variable_set "test" {
@@ -32,24 +32,25 @@ data tfe_variable_set "test" {
 module "advanced_workspace" {
   source = "./modules/tfe_workspace"
 
-  name              = "advanced-workspace"
+  name              = "var.name"
   organization      = data.tfe_organization.myorg.name
   description       = "An advanced Terraform Cloud/Enterprise workspace"
   terraform_version = "1.3.7"
+  project_id        = tfe_project.myproject.id
 
-  project_id = tfe_project.myproject.id
-
+/*
   terraform_variables = {
     string_variable = "stringvalue"
     number_variable = 1
     bool_variable   = true
   }
+*/
   queue_all_runs             = false
  # working_directory         = "/my/sub/path"
   vcs_repository_identifier  = "var.vcs_repository_identifier"
   vcs_repository_branch      = "main"
   oauth_token_id             =  "var.oauth_token_id"
-  variable_set_ids = [data.tfe_variable_set.test.id]
+  variable_set_ids           = [data.tfe_variable_set.test.id]
 
   terraform_sensitive_variables = {
     secret_token = var.secret_token
